@@ -3,7 +3,7 @@
   "modid": "itembindings",
   "name": "Item Bindings",
   "description": "A mod that lets you bind commands to items.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "mcversion": "1.12.x",
   "url": "",
   "updateUrl": "",

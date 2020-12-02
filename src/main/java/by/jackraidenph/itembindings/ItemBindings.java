@@ -1,8 +1,12 @@
 package by.jackraidenph.itembindings;
 
 import by.jackraidenph.itembindings.proxy.CommonProxy;
+import net.minecraft.block.BlockCommandBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -18,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 public class ItemBindings {
     public static final String MODID = "itembindings";
     public static final String NAME = "Item Bindings Mod";
-    public static final String VERSION = "1.0.2";
+    public static final String VERSION = "1.0.3";
     @SidedProxy(clientSide = "by.jackraidenph.itembindings.proxy.ClientProxy", serverSide = "by.jackraidenph.itembindings.proxy.CommonProxy")
     public static CommonProxy proxy;
     public static Logger MOD_LOGGER;
@@ -38,6 +42,16 @@ public class ItemBindings {
                 if (e.getEntityPlayer().getServer() != null)
                     e.getEntityPlayer().getServer().getCommandManager().executeCommand(e.getEntityPlayer(), e.getItemStack().getTagCompound().getString("binding"));
             }
+    }
+
+    @SubscribeEvent
+    public void onMessage(ClientChatReceivedEvent e) {
+        if (Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).hasTagCompound())
+            if (Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().hasKey("binding"))
+                if (Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().hasKey("noMessage"))
+                    if (Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().getBoolean("noMessage"))
+                        if (!e.getMessage().getUnformattedText().contains("<" + Minecraft.getMinecraft().player.getName() + ">"))
+                            e.setCanceled(true);
     }
 
     @EventHandler

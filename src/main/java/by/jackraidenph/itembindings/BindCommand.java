@@ -41,10 +41,16 @@ public class BindCommand implements ICommand {
 
         if (args.length == 1 && args[0].equals("null")) {
             item.getTagCompound().removeTag("binding");
+            item.getTagCompound().removeTag("noMessage");
             if (item.getTagCompound().getSize() == 0)
                 item.setTagCompound(null);
             return;
         }
+
+        if (args[args.length - 1].equals("noMessage")) {
+            item.getTagCompound().setBoolean("noMessage", true);
+        } else
+            item.getTagCompound().setBoolean("noMessage", false);
 
         String arrayString = Arrays.toString(args).replaceAll(",", "");
         item.getTagCompound().setString("binding", arrayString.substring(1, arrayString.length() - 1));
